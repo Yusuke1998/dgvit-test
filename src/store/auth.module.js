@@ -1,31 +1,51 @@
-const user = JSON.parse(localStorage.getItem('user'));
-const initialState = user
-  ? { status: { loggedIn: true }, user }
-  : { status: { loggedIn: false }, user: null };
+import axios from 'axios';
+const token = JSON.parse(localStorage.getItem('token'));
+const initialState = token
+  ? { status: { loggedIn: true }, token }
+  : { status: { loggedIn: false }, token: null };
 
 export const auth = {
   namespaced: true,
   state: initialState,
   actions: {
-    login({ commit }, user) {
+    login({ commit }, userData) {
+      const url = "https://reqres.in/api/login";
+      axios.post(url, userData)
+      .then(res => {
+          commit('loginSuccess', res.data.token);
+          localStorage.setItem('token', JSON.stringify(res.data.token));
+        })
+        .catch(err => {
+          commit('loginFailure');
+        });
+        
     },
     logout({ commit }) {
+      commit('logout');
     },
-    register({ commit }, user) {
+    register({ commit }, userData) {
+      const url = "https://reqres.in/api/register";
+      axios.post(url, userData)
+      .then(res => {
+          commit('registerSuccess');
+        })
+        .catch(err => {
+          commit('registerFailure');
+        });
     }
   },
   mutations: {
-    loginSuccess(state, user) {
+    loginSuccess(state, token) {
       state.status.loggedIn = true;
-      state.user = user;
+      state.token = token;
     },
     loginFailure(state) {
       state.status.loggedIn = false;
-      state.user = null;
+      state.token = null;
     },
     logout(state) {
       state.status.loggedIn = false;
-      state.user = null;
+      state.token = null;
     },
     registerSuccess(state) {
       state.status.loggedIn = false;

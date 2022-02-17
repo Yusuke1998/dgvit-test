@@ -9,7 +9,7 @@
         DEV: Jhonny Prz
       </router-link> 
       /
-      <router-link to="/crud">
+      <router-link to="/">
         CRUD de Usuarios
       </router-link>
     </div>

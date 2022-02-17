@@ -1,31 +1,38 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import RegisterView from '../views/RegisterView.vue'
+// import RegisterView from '../views/RegisterView.vue'
 import LoginView from '../views/LoginView.vue'
 import JhonnyPrz from '../views/JhonnyPrz.vue'
 import HomeView from '../views/HomeView.vue'
+import PageNotFound from '../components/PageNotFound.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'register',
-      component: RegisterView
-    },
-    {
       path: '/iniciar-sesion',
       name: 'login',
-      component: LoginView
+      component: LoginView,
+    },
+    {
+      path: '/',
+      name: 'crud',
+      component: HomeView,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/jhonny-prz',
       name: 'me',
       component: JhonnyPrz,
+      meta: {
+        requiresAuth: true
+      }
     },
-    {
-      path: '/crud',
-      name: 'crud',
-      component: HomeView,
+    { 
+      path: '/:pathMatch(.*)', 
+      name: '404', 
+      component: PageNotFound 
     },
   ]
 })
