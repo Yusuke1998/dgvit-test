@@ -6,6 +6,7 @@ import VueAxios from 'vue-axios'
 import store from "./store";
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Notifications from '@kyvg/vue3-notification'
 
 const app = createApp(App)
 
@@ -28,4 +29,5 @@ router.beforeEach((to, from, next) => {
 app.use(router)
     .use(VueAxios, axios)
     .use(store)
+    .use(Notifications)
     .mount('#app')
