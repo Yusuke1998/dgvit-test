@@ -9,17 +9,20 @@ export const auth = {
   namespaced: true,
   state: initialState,
   actions: {
-    login({ commit }, userData) {
+    async login({ commit }, userData) {
       const url = "https://reqres.in/api/login";
-      axios.post(url, userData)
-      .then(res => {
-        commit('loginSuccess', res.data.token);
-        localStorage.setItem('token', JSON.stringify(res.data.token));
-        router.push('/');
-      })
-      .catch(err => {
+      try {
+        const { data: { token }} = (await axios.post(url, userData))
+        if (token) {
+          commit('loginSuccess', token);
+          localStorage.setItem('token', JSON.stringify(token));
+          return true;
+        }
+      } catch (error) {
         commit('loginFailure');
-      });
+        localStorage.removeItem('token');
+        return false;
+      }
     },
     logout({ commit }) {
       commit('logout');
@@ -28,13 +31,14 @@ export const auth = {
     },
     register({ commit }, userData) {
       const url = "https://reqres.in/api/register";
-      axios.post(url, userData)
-      .then(res => {
-        commit('registerSuccess');
-      })
-      .catch(err => {
+      try {
+        const { data } = (axios.post(url, userData));
+        commit('registerSuccess', data);
+        router.push('/');
+      } catch (error) {
         commit('registerFailure');
-      });
+        router.push('/registro');
+      }
     }
   },
   mutations: {
