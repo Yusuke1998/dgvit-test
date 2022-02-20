@@ -20,10 +20,6 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
-
-  // if (to.matched.some(record => record.name === 'login') && store.getters.isLoggedIn) {
-  //   next({ name: 'me' })
-  // }
 })
 
 app.use(router)
